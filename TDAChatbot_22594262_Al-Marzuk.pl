@@ -1,4 +1,13 @@
-%Aqu� van las funciones del TDA Chatbot
+%Aquí van las funciones del TDA Chatbot
+/* 
+  RF5: TDA Chatbot (Constructor) 
+  Descripción: Predicado que crea un Chatbot, que es una lista con los 
+  elementos del dominio 
+  Dominio: ChatbotID (Integer) X ChatbotName (String) X WelcomeMsg (String) X StartFlowID X Flows (List) 
+  Metas Primarias: Construir Chatbot
+  Metas Secundarias: Comprobar si los elementos de la lista
+  cumplen con los elementos del dominio. Comprobar si los flows a añadir están duplicados.
+ */
 
 chatbot(ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, Flows,
         [ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, FlowsSinDuplicados]) :-
