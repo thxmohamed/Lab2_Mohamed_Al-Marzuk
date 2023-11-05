@@ -13,3 +13,8 @@ chatbot(ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, Flows,
         [ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, FlowsSinDuplicados]) :-
     agregarSinDuplicados(Flows, [], FlowsSinDuplicados),
     integer(ChatbotID), string(ChatbotName), string(WelcomeMsg), integer(StartFlowID), is_list(Flows).
+
+%aca ira el RF6
+%caso basr
+
+chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, []], Flow, [ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, [Flow]]).
