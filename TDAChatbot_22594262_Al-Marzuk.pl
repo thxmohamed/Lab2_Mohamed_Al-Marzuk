@@ -48,3 +48,54 @@ chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, [PrimerFlow|Res
     member(PrimerFlow, ListFlows),
     chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, RestoDeFlows], ListFlows, Chatbot2).
 
+
+/*
+ ##########################################
+ #Funciones de Pertenencia del TDA Chatbot#
+ ##########################################
+*/
+
+
+/*
+ Nombre: chatbotGetFlows/2
+ Dominio: Chatbot, Flows
+ Descripción: Entrega los flujos del Chatbot
+ */
+
+chatbotGetFlows([_, _, _, _, Flows], Flows).
+
+/*
+ Nombre: chatbotGetName/2
+ Dominio: Chatbot, Name
+ Descripción: Entrega el nombre del chatbot
+ */
+
+
+chatbotGetName([_, ChatbotName, _, _, _], ChatbotName).
+
+/*
+ Nombre: chatbotGetID/2
+ Dominio: Chatbot, ID
+ Descripción: Entrega el ID del chatbot
+ */
+
+
+chatbotGetID([ID, _, _, _, _], ID).
+
+/*
+ Nombre: chatbotGetMsg/2
+ Dominio: Chatbot, Msg
+ Descripción: Entrega el mensaje de bienvenida del chatbot
+ */
+
+
+chatbotGetMsg([_ , _, Msg, _, _], Msg).
+
+/*
+ Nombre: chatbotGetIDFlow/2
+ Dominio: Chatbot, IDFlow
+ Descripción: Entrega el ID del flujo inicial del chatbot
+ */
+
+
+chatbotGetIDFlow([_, _, _, FlowID, _], FlowID).

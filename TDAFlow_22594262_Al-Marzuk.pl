@@ -55,3 +55,26 @@ flowAddOption([ID, NameMsg, Options], Option, [ID, NameMsg, Options]) :-
 flowAddOption([ID, NameMsg, Options], Option, [ID, NameMsg, [Option|Options]]) :-
     \+ member(Option, Options).
 
+
+/*
+ #######################################
+ #Funciones de Pertenencia del TDA Flow#
+ #######################################
+*/
+
+/*
+ Nombre: flowGetID/2
+ Dominio: Flow, ID
+ Descripción: Entrega el ID del flujo
+ */
+
+flowGetID([ID, _, _], ID).
+
+/*
+ Nombre: flowGetOptions/2
+ Dominio: Flow, Options
+ Descripción: Entrega las opciones del flujo
+ */
+
+
+flowGetOptions([_, _, Options], Options).
