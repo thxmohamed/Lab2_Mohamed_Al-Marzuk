@@ -1,4 +1,6 @@
+module(TDAFlow_22594262_almarzuk, agregarSinDuplicados/3).
 /*
+ nombre: agregarSinDuplicados/3
  Descripción: Predicado que filtra los elementos de una lista, borrando
  los duplicados. Este se va a utilizar para eliminar las opciones
  duplicadas de un Flow. Esto se hace comprobando si el primer elemento
@@ -9,6 +11,8 @@
  Metas Primarias: Eliminar duplicados
  Metas secundarias: No aplica
 */
+
+
 
 use_module(TDAOption_22594262_almarzuk, [option/6]).
 
@@ -25,9 +29,10 @@ agregarSinDuplicados([Elemento|Resto], Acc, ListaSalida) :-
 
 /*
  RF3: TDA Flow (Constructor)
+ nombre: flow/4
  Descripción: Predicado que crea un Flow, que es una lista con los
  elementos del dominio
- Dominio: ID (Integer) X NameMsg (String) X Options (List)
+ Dominio: ID (Integer) X NameMsg (String) X Options (List) X Flow (List)
  Metas Primarias: Construir Flow
  Metas Secundarias: Comprobar si los elementos de la lista
  cumplen con los elementos del dominio
@@ -40,7 +45,7 @@ flow(ID, NameMsg, Options, [ID, NameMsg, OptionsSinDuplicados]) :-
 
 /*
  RF4: TDA Flow (Modificador)
- Nombre: flowAddOption
+ Nombre: flowAddOption/3
  Descripción: Predicado que agrega una opción a un flow, siempre y
  cuando esta opción no esté ya dentro del flow
  Dominio: Flow X Option

@@ -1,12 +1,17 @@
+%module(TDAChatbot_22594262_almarzuk, agregarSinDuplicados/3).
+
+use_module(TDAFlow_22594262_almarzuk, agregarSinDuplicados/3).
 
 /*
   RF5: TDA Chatbot (Constructor)
+  nombre: chatbot/6
   Descripción: Predicado que crea un Chatbot, que es una lista con los
   elementos del dominio
-  Dominio: ChatbotID (Integer) X ChatbotName (String) X WelcomeMsg (String) X StartFlowID X Flows (List)
+  Dominio: ChatbotID (Integer) X ChatbotName (String) X WelcomeMsg
+  (String) X StartFlowID X Flows (List) X Chatbot (List)
   Metas Primarias: Construir Chatbot
-  Metas Secundarias: Comprobar si los elementos de la lista
-  cumplen con los elementos del dominio. Comprobar si los flows a
+  Metas Secundarias: Comprobar si los elementos de la
+  lista cumplen con los elementos del dominio. Comprobar si los flows a
   añadir están duplicados.
  */
 
@@ -18,6 +23,7 @@ chatbot(ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, Flows,
 
 /*
   RF6: TDA Chatbot (Modificador)
+  nombre: chatbotAddFlow/3
   Descripción: Predicado que añade un flujo a un chatbot de
   manera recursiva
   Recursión usada: De cola
