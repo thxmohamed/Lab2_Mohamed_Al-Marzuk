@@ -1,59 +1,4 @@
-%module(TDAChatbot_22594262_almarzuk, agregarSinDuplicados/3).
-
-use_module(TDAFlow_22594262_almarzuk, agregarSinDuplicados/3).
-
-/*
-  RF5: TDA Chatbot (Constructor)
-  nombre: chatbot/6
-  Descripción: Predicado que crea un Chatbot, que es una lista con los
-  elementos del dominio
-  Dominio: ChatbotID (Integer) X ChatbotName (String) X WelcomeMsg
-  (String) X StartFlowID X Flows (List) X Chatbot (List)
-  Metas Primarias: Construir Chatbot
-  Metas Secundarias: Comprobar si los elementos de la
-  lista cumplen con los elementos del dominio. Comprobar si los flows a
-  añadir están duplicados.
- */
-
-chatbot(ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, Flows,
-        [ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, FlowsSinDuplicados]) :-
-    agregarSinDuplicados(Flows, [], FlowsSinDuplicados),
-    integer(ChatbotID), string(ChatbotName), string(WelcomeMsg), integer(StartFlowID), is_list(Flows).
-
-
-/*
-  RF6: TDA Chatbot (Modificador)
-  nombre: chatbotAddFlow/3
-  Descripción: Predicado que añade un flujo a un chatbot de
-  manera recursiva
-  Recursión usada: De cola
-  Dominio: Chatbot X Flow
-  Metas Primarias: Añadir flujo a un chatbot
-  Metas Secundarias: Comprobar si la lista de flujos tiene elementos, o
-  si el flujo a añadir está ya añadido.
- */
-
-% Caso Base: La lista de flows está vacía, así que se añade el flow sin
-% ningún problema.
-
-chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, []], Flow, [ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, [Flow]]).
-
-% Caso recursivo: La lista de flows no está vacía, así que se separa en
-% el primer flow y en el resto. se comprueba si el primer flow está
-% presente en ListFlows (que será la lista de flows final), en ese caso,
-% se avanza la recursión con el resto de flows, y si no está presente,
-% se añade a ListFlows y se avanza con el resto. Así hasta llegar al
-% caso base en el que ya no hay más flows en el chatbot, y se añade
-% ListFlows
-
-chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, [PrimerFlow|RestoDeFlows]], ListFlows, Chatbot2) :-
-    \+ member(PrimerFlow, ListFlows),
-    chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, RestoDeFlows], [PrimerFlow|ListFlows], Chatbot2).
-
-chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, [PrimerFlow|RestoDeFlows]], ListFlows, Chatbot2) :-
-    member(PrimerFlow, ListFlows),
-    chatbotAddFlow([ChatbotID, ChatbotName, WelcomeMsg, StartFlowID, RestoDeFlows], ListFlows, Chatbot2).
-
+:- consult('tdaflow_22594262_Al-Marzuk.pl').
 
 /*
  ##########################################
@@ -103,5 +48,70 @@ chatbotGetMsg([_ , _, Msg, _, _], Msg).
  Descripción: Entrega el ID del flujo inicial del chatbot
  */
 
-
 chatbotGetIDFlow([_, _, _, FlowID, _], FlowID).
+
+/*
+ Nombre: chatbotUpdateFlowID/3
+ Dominio: Chatbot, IDFlow X NewChatbot
+ Descripción: modifica el ID del flujo actual del chatbot
+ */
+
+chatbotUpdateFlowID([ID, ChatbotName, Msg, _, Flows], NewID, [ID, ChatbotName, Msg, NewID, Flows]).
+
+/*
+ Nombre: chatbotFlowSearch/2
+ Dominio: Chatbot, IdFlow, OptionList
+ Descripción: Regla recursiva que lo que hace es extraer todos los
+ nombres de las opciones contenidas en un flujo, en base a su ID.
+ Recursion Usada: de Cola
+ Metas primarias: Encontrar una lista con todas las opciones de un flujo
+ en base a su ID
+ Metas secundarias: no aplica
+*/
+
+% Condicion de parada, no hay más flows, retorna una lista vacía
+chatbotFlowSearch(Chatbot, _, []) :-
+    chatbotGetFlows(Chatbot, Flows),
+    isNull(Flows).
+
+% Segunda condición de parada, el primer Flow coincide en ID con el ID
+% que le paso, en ese caso me devuelve las opciones
+chatbotFlowSearch(Chatbot, IdFlow, OptionList) :-
+    chatbotGetFlows(Chatbot, [Flow1 | _]),
+    flowGetID(Flow1, ID),
+    ID = IdFlow,
+    flowOptionSearch(Flow1, OptionList).
+
+% Caso recursivo, busca en el resto de flujos
+chatbotFlowSearch(Chatbot, IdFlow, OptionList) :-
+    chatbotGetFlows(Chatbot, [_ | RestoFlows]),
+    chatbotFlowSearch([_, _, _, _, RestoFlows], IdFlow, OptionList).
+
+/*
+ Nombre: chatbotFindFlow/3
+ Dominio: Chatbot, IdFlow, Flow
+ Descripción: Regla recursiva que lo que hace es buscar un flow dentro
+ de un chatbot en base a su ID.
+ Recursion Usada: de Cola
+ Metas primarias: Encontrar un flow en base a su ID
+ Metas secundarias: no aplica
+*/
+
+% Condicion de parada, no hay más flows en el chatbot, retorna una lista
+% vacía
+
+chatbotFindFlow([_, _, _, _, []], _, []).
+
+% segunda condicion de parada, el primer flow coincide en ID con el ID
+% que le paso, retorna ese flow
+
+chatbotFindFlow([_, _, _, _, [Flow1|_]], FlowID, Flow):-
+    flowGetID(Flow1, ID),
+    ID == FlowID,
+    Flow = Flow1.
+
+%Caso recursivo, busca en el resto de flows
+
+chatbotFindFlow([_, _, _, _, [_|RestoFlows]], FlowID, Flow) :-
+    chatbotFindFlow([_, _, _, _, RestoFlows], FlowID, Flow).
+

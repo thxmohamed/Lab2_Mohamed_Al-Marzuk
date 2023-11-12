@@ -1,4 +1,5 @@
-module(TDAFlow_22594262_almarzuk, agregarSinDuplicados/3).
+:- consult('tdaoption_22594262_Al-Marzuk.pl').
+
 /*
  nombre: agregarSinDuplicados/3
  Descripción: Predicado que filtra los elementos de una lista, borrando
@@ -12,10 +13,6 @@ module(TDAFlow_22594262_almarzuk, agregarSinDuplicados/3).
  Metas secundarias: No aplica
 */
 
-
-
-use_module(TDAOption_22594262_almarzuk, [option/6]).
-
 agregarSinDuplicados([], Acc, Acc).
 
 agregarSinDuplicados([Elemento|Resto], Acc, ListaSalida) :-
@@ -28,43 +25,9 @@ agregarSinDuplicados([Elemento|Resto], Acc, ListaSalida) :-
 
 
 /*
- RF3: TDA Flow (Constructor)
- nombre: flow/4
- Descripción: Predicado que crea un Flow, que es una lista con los
- elementos del dominio
- Dominio: ID (Integer) X NameMsg (String) X Options (List) X Flow (List)
- Metas Primarias: Construir Flow
- Metas Secundarias: Comprobar si los elementos de la lista
- cumplen con los elementos del dominio
-*/
-
-
-flow(ID, NameMsg, Options, [ID, NameMsg, OptionsSinDuplicados]) :-
-    agregarSinDuplicados(Options, [], OptionsSinDuplicados),
-    integer(ID), string(NameMsg), is_list(Options).
-
-/*
- RF4: TDA Flow (Modificador)
- Nombre: flowAddOption/3
- Descripción: Predicado que agrega una opción a un flow, siempre y
- cuando esta opción no esté ya dentro del flow
- Dominio: Flow X Option
- Metas Primarias: Agregar una opción a un flow
- Secundarias: Comprobar si la opción a agregar está dentro del flow
- */
-
-
-flowAddOption([ID, NameMsg, Options], Option, [ID, NameMsg, Options]) :-
-    member(Option, Options).
-
-flowAddOption([ID, NameMsg, Options], Option, [ID, NameMsg, [Option|Options]]) :-
-    \+ member(Option, Options).
-
-
-/*
- #######################################
- #Funciones de Pertenencia del TDA Flow#
- #######################################
+ ###################################
+ #Funciones selectoras del TDA Flow#
+ ###################################
 */
 
 /*
@@ -81,5 +44,88 @@ flowGetID([ID, _, _], ID).
  Descripción: Entrega las opciones del flujo
  */
 
-
 flowGetOptions([_, _, Options], Options).
+
+/*
+ Nombre: flowGetName/2
+ Dominio: Flow, Name
+ Descripción: Entrega el nombre del flujo
+*/
+
+flowGetName([_, Name, _], Name).
+
+/*
+ Nombre: flowIdsFilter/3
+ Dominio: Flow, Msg (String), List
+ Descripción: Regla recursiva que lo que hace es explorar las opciones
+ de un flujo en busca de la lista de keywords que contenga al mensaje,
+ cuando la encuentra, devuelve una lista con el id del chatbot y flujo
+ asociados a la opcion
+ Recursion Usada: De cola
+ Metas primarias: Encontrar la opción buscada
+ Metas secundarias: no aplica
+*/
+
+% Condición de parada, no hay más opciones en el flujo, devuelve una
+% lista vacía
+
+flowIdsFilter(Flow, _, []) :-
+    flowGetOptions(Flow, []).
+
+% Caso recursivo, explora cada opción en busca de la keyword
+
+flowIdsFilter([_, _, [Op1|RestoOps]], Msg, List) :-
+    optionIdsFilter(Op1, Msg, List) ;
+    flowIdsFilter([_, _, RestoOps], Msg, List).
+
+/*
+ Nombre: flowIdsFilterNum/3
+ Dominio: Flow, Msg (String), List
+ Descripción: Misma idea que la anterior, regla recursiva que lo que
+ hace es explorar las opciones de un flujo en busca del id que
+ coincida con el string numérico que se le entregó, cuando la encuentra,
+ devuelve una lista con el id del chatbot y flujo asociados a la opcion
+ Recursion Usada: De cola
+ Metas primarias: Encontrar la opción buscada
+ Metas secundarias: no aplica
+*/
+
+% Condición de parada, no hay más opciones en el flujo, devuelve una
+% lista vacía
+
+flowIdsFilterNum(Flow, _, []) :-
+    flowGetOptions(Flow, []).
+
+% Caso recursivo, explora cada opción en busca del ID correcto
+
+flowIdsFilterNum([_, _, [Op1|RestoOps]], Msg, List) :-
+    optionIdsFilterNum(Op1, Msg, List) ;
+    flowIdsFilterNum([_ , _, RestoOps], Msg, List).
+
+/*
+ Nombre: flowOptionSearch/2
+ Dominio: Flow, List
+ Descripción: Regla recursiva que lo que hace es extraer todos los
+ nombres de las opciones contenidas en un flujo.
+ Recursion Usada: Natural
+ Metas primarias: Encontrar una lista con todas las opciones
+ Metas secundarias: no aplica
+*/
+
+% Condicion de parada, no hay más opciones en el flujo, devuelve una
+% lista vacía
+
+flowOptionSearch(Flow, []) :-
+    flowGetOptions(Flow, Options),
+    isNull(Options).
+
+% Caso recursivo, hay opciones en la lista, se obtiene el nombre de cada
+% una y se agregan a una lista
+
+flowOptionSearch(Flow, List) :-
+    flowGetOptions(Flow, [Option1|RestoOptions]),
+    optionGetName(Option1, Name),
+    flowOptionSearch([_, _, RestoOptions], Acc),
+    append(Acc, ["\n", Name], List).
+
+
