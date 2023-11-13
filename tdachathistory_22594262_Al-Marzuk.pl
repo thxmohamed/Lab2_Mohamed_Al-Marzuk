@@ -1,8 +1,14 @@
 /*
  Nombre: createUserHistory/4
+
  Dominio: Time (Float), Sender (String), Msg (String), History (List)
+
  Descripción: Entrega una lista que contiene los elementos del dominio,
  que representan un mensaje de un usuario
+
+ Metas Primarias: createUserHistory/4
+
+ Metas Secundarias: number_codes/2, atom_codes/2
  */
 
 createUserHistory(Time, Sender, Msg, History) :-
@@ -10,10 +16,16 @@ createUserHistory(Time, Sender, Msg, History) :-
     History = [ TimeText, " ", Sender, ": ", Msg, "\n\n"].
 
 /*
- Nombre: createUserHistory/4
+ Nombre: createChatbotHistory/4
+
  Dominio: Time (Float), Sender (String), Msg (String), History (List)
+
  Descripción: Entrega una lista que contiene los elementos del dominio,
  que representan un mensaje de un chatbot
+
+ Metas primarias: createChatbotHistory/4
+
+ Metas secundarias: number_codes/2, atom_codes/2
  */
 
 createChatbotHistory(Time, Sender, Msg, History) :-
@@ -22,32 +34,43 @@ createChatbotHistory(Time, Sender, Msg, History) :-
 
 /*
  Nombre: textListConcatenate/2
+
  Dominio: List X String
+
  Descripción: concatena en un string unico una lista de strings
+
  Recursion Usada: Natural
- Metas primarias: concatenar lista de strings
- Metas secundarias: no aplica
+
+ Metas primarias: textListConcatenate/2
+
+ Metas secundarias: string_concat/3
 */
 
-textListConcatenate([], "").
+textListConcat([], "").
 
-textListConcatenate([PrimerString|RestoStrings], Texto) :-
-    textListConcatenate(RestoStrings, RestoTexto),
+textListConcat([PrimerString|RestoStrings], Texto) :-
+    textListConcat(RestoStrings, RestoTexto),
     string_concat(PrimerString, RestoTexto, Texto).
 
 /*
  Nombre: chatHistoryConcat/2
+
  Dominio: MsgList X String
+
  Descripción: concatena en un string unico una lista de mensajes
+
  Recursion Usada: Natural
- Metas primarias: concatenar lista de strings
- Metas secundarias: no aplica
+
+ Metas primarias: chatHistoryConcat/2
+
+ Metas secundarias: textListConcat/2, chatHistoryConcat/2,
+ string_concat/3
 */
 
 chatHistoryConcat([], "").
 
 chatHistoryConcat([Msg1|RestoMsg], Texto) :-
-    textListConcatenate(Msg1, PrimerText),
+    textListConcat(Msg1, PrimerText),
     chatHistoryConcat(RestoMsg, RestoText),
     string_concat(PrimerText, RestoText, Texto).
 
