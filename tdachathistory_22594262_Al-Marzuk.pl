@@ -46,10 +46,10 @@ createChatbotHistory(Time, Sender, Msg, History) :-
  Metas secundarias: string_concat/3
 */
 
-textListConcat([], "").
+chatMsgConcat([], "").
 
-textListConcat([PrimerString|RestoStrings], Texto) :-
-    textListConcat(RestoStrings, RestoTexto),
+chatMsgConcat([PrimerString|RestoStrings], Texto) :-
+    chatMsgConcat(RestoStrings, RestoTexto),
     string_concat(PrimerString, RestoTexto, Texto).
 
 /*
@@ -70,7 +70,7 @@ textListConcat([PrimerString|RestoStrings], Texto) :-
 chatHistoryConcat([], "").
 
 chatHistoryConcat([Msg1|RestoMsg], Texto) :-
-    textListConcat(Msg1, PrimerText),
+    chatMsgConcat(Msg1, PrimerText),
     chatHistoryConcat(RestoMsg, RestoText),
     string_concat(PrimerText, RestoText, Texto).
 

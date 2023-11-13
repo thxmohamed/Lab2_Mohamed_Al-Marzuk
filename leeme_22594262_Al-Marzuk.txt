@@ -1,0 +1,5 @@
+Para poder ejecutar el programa, hay que abrir SWI-Prolog y
+consultar al archivo main_22594262_Al-Marzuk.pl, luego, hay que
+copiar el contenido de los archivos prueba1 y prueba2 y pegarlos
+en el apartado de consulta. tras esto, se verá por pantalla la 
+interacción entre el usuario y el chatbot.
